@@ -1,2 +1,2 @@
-# top-calculator
-Final project of The Odin Project – a calculator using HTML, CSS, and JavaScript
+# Calculator
+[Final project of The Odin Project](https://www.theodinproject.com/lessons/foundations-calculator) – a calculator using HTML, CSS, and JavaScript.
