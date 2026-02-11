@@ -35,20 +35,10 @@ div {
     background-color: rgb(185, 202, 216);
 }
 
-.operators-numericals {
+.numericals-operators {
     flex-grow: 1;
     align-self: stretch;
     gap: var(--button-gap-s)
-}
-
-.operators {
-    flex-direction: column;
-    flex: 0.5;
-    gap: var(--button-gap-s);
-}
-
-.operators button {
-    flex-grow: 1;
 }
 
 .numericals {
@@ -65,4 +55,23 @@ div {
 
 .numericals button {
     flex-grow: 1;
+}
+
+.operators {
+    flex-direction: column;
+    flex: 0.2;
+    gap: var(--button-gap-s);
+}
+
+.operators button {
+    flex-grow: 1;
+}
+
+.bottom-row {
+    flex: 1;
+    align-self: stretch;
+}
+
+.bottom-row button {
+    flex: 1;
 }

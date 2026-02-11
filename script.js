@@ -23,30 +23,33 @@ function exponent(a, b) {
 let firstNumber = 0
 let secondNumber = 0
 
-
 function operate(a, b, operator){
     if (operator === '+') {
         return add(a, b)
     } else if (operator === '-') {
         return subtract(a, b)
-    } else if (operator === '*') {
+    } else if (operator === '\u00D7') {
         return multiply(a, b)
-    } else if (operator === '/') {
+    } else if (operator === '\u00F7') {
         return divide(a, b)
+    } else if (operator === 'x\u207f') {
+        return exponent(a, b)
     }
 }
 
 // Basic calculator layout
 const calculator = document.querySelector('.calculator')
 const screen = document.querySelector('.screen')
-const operatorContainer = document.querySelector('.operators')
+const numerOperContainer = document.querySelector('.numericals-operators')
 const numericalsContainer = document.querySelector('.numericals')
+const operatorContainer = document.querySelector('.operators')
+const bottomContainer = document.querySelector('.bottom-row')
 
 // Create screen
 screen.innerText = '000'
 
 // Create operators
-const operators = ['x\u207f', '/', '*', '-', '+']
+const operators = ['AC', 'x\u207f', '\u00F7', '\u00D7', '-', '+']
 for (let i = 0; i < operators.length; i++) {
     const operButton = document.createElement('button')
     operButton.innerText = operators[i]
@@ -69,4 +72,12 @@ for (let row = 3; row > 0; row--) {
         rowContainer.appendChild(numButton)
     }
     numericalsContainer.appendChild(rowContainer)
+}
+
+// Create bottom row with zero, decimal, and equals
+const bottomOperators = ['0', '.', '=']
+for (let i = 0; i < 3; i++) {
+    const bottomButton = document.createElement('button')
+    bottomButton.innerText = bottomOperators[i]
+    bottomContainer.appendChild(bottomButton)
 }
