@@ -15,10 +15,14 @@ function divide(a, b){
     return a / b
 }
 
+function exponent(a, b) {
+    return a ** b
+}
+
 // Operations
 let firstNumber = 0
 let secondNumber = 0
-let operators = []
+const operators = ['+', '-', '*', '/', 'x\u207f']
 
 function operate(a, b, operator){
     if (operator === '+') {
@@ -38,8 +42,15 @@ const screen = document.querySelector('.screen')
 const operatorContainer = document.querySelector('.operators')
 const numericalsContainer = document.querySelector('.numericals')
 
-// Create operators
+// Create screen
+screen.innerText = '000'
 
+// Create operators
+for (let i = 0; i < operators.length; i++) {
+    const operButton = document.createElement('button')
+    operButton.innerText = operators[i]
+    operatorContainer.appendChild(operButton)
+}
 
 // Create numericals button grid 1-9
 for (let row = 3; row > 0; row--) {

@@ -7,6 +7,8 @@
     --calculator-width: 480px;
     --calculator-height: 480px;
     --button-width: 24px;
+    --button-gap-l: 16px;
+    --button-gap-s: 4px;
 }
 
 div {
@@ -17,21 +19,41 @@ div {
     flex-direction: column;
     justify-self: center;
     align-items: center;
+    gap: var(--button-gap-l);
     width: var(--calculator-width);
     height: var(--calculator-height);
     background-color: aliceblue;
+}
+
+.screen {
+    justify-content: end;
+    align-items: end;
+    flex: 1 1 auto;
+    width: var(--calculator-width);
+    border: 2px inset rgb(185, 202, 216);
+    background-color: rgb(185, 202, 216);
+}
+
+.operators {
+    flex: 1 1 auto;
+    align-self: stretch;
+    gap: var(--button-gap-s);
+}
+
+.operators button {
+    flex-grow: 1;
 }
 
 .numericals {
     flex-direction: column;
     flex: 1 1 auto;
     align-self: stretch;  /* The flex-grow only has an effect on the main axis */
-    gap: 4px;
+    gap: var(--button-gap-s);
 }
 
 .numericals .num-row {
     flex-grow: 1;
-    gap: 4px;
+    gap: var(--button-gap-s);
 }
 
 .numericals button {
