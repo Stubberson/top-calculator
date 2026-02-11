@@ -22,7 +22,7 @@ function exponent(a, b) {
 // Operations
 let firstNumber = 0
 let secondNumber = 0
-const operators = ['+', '-', '*', '/', 'x\u207f']
+
 
 function operate(a, b, operator){
     if (operator === '+') {
@@ -46,6 +46,7 @@ const numericalsContainer = document.querySelector('.numericals')
 screen.innerText = '000'
 
 // Create operators
+const operators = ['x\u207f', '/', '*', '-', '+']
 for (let i = 0; i < operators.length; i++) {
     const operButton = document.createElement('button')
     operButton.innerText = operators[i]

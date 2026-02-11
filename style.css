@@ -19,6 +19,7 @@ div {
     flex-direction: column;
     justify-self: center;
     align-items: center;
+    margin-top: var(--button-gap-l);
     gap: var(--button-gap-l);
     width: var(--calculator-width);
     height: var(--calculator-height);
@@ -34,9 +35,15 @@ div {
     background-color: rgb(185, 202, 216);
 }
 
-.operators {
-    flex: 1 1 auto;
+.operators-numericals {
+    flex-grow: 1;
     align-self: stretch;
+    gap: var(--button-gap-s)
+}
+
+.operators {
+    flex-direction: column;
+    flex: 0.5;
     gap: var(--button-gap-s);
 }
 
