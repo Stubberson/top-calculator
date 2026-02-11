@@ -1,0 +1,39 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --calculator-width: 480px;
+    --calculator-height: 480px;
+    --button-width: 24px;
+}
+
+div {
+    display: flex;
+}
+
+.calculator {
+    flex-direction: column;
+    justify-self: center;
+    align-items: center;
+    width: var(--calculator-width);
+    height: var(--calculator-height);
+    background-color: aliceblue;
+}
+
+.numericals {
+    flex-direction: column;
+    flex: 1 1 auto;
+    align-self: stretch;  /* The flex-grow only has an effect on the main axis */
+    gap: 4px;
+}
+
+.numericals .num-row {
+    flex-grow: 1;
+    gap: 4px;
+}
+
+.numericals button {
+    flex-grow: 1;
+}
