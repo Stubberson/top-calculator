@@ -4,9 +4,7 @@
 }
 
 :root {
-    --calculator-width: 480px;
-    --calculator-height: 480px;
-    --button-width: 24px;
+    --button-width: 48px;
     --button-gap-l: 16px;
     --button-gap-s: 4px;
 }
@@ -20,58 +18,68 @@ div {
     justify-self: center;
     align-items: center;
     margin-top: var(--button-gap-l);
-    gap: var(--button-gap-l);
-    width: var(--calculator-width);
-    height: var(--calculator-height);
     background-color: aliceblue;
 }
 
 .screen {
     justify-content: end;
     align-items: end;
-    flex: 1 1 auto;
-    width: var(--calculator-width);
+    flex: 1;
     border: 2px inset rgb(185, 202, 216);
     background-color: rgb(185, 202, 216);
 }
 
-.numericals-operators {
-    flex-grow: 1;
+.top-operators {
+    flex: 1;
     align-self: stretch;
+    gap: var(--button-gap-s);
+}
+
+.top-operators button {
+    width: var(--button-width);
+    height: var(--button-width);
+}
+
+.numericals-operators {
+    align-self: stretch;
+    margin-top: var(--button-gap-s);
     gap: var(--button-gap-s)
 }
 
 .numericals {
     flex-direction: column;
-    flex: 1 1 auto;
-    align-self: stretch;  /* The flex-grow only has an effect on the main axis */
+    justify-content: end;
     gap: var(--button-gap-s);
 }
 
 .numericals .num-row {
-    flex-grow: 1;
     gap: var(--button-gap-s);
 }
 
 .numericals button {
-    flex-grow: 1;
+    width: var(--button-width);
+    height: var(--button-width);
 }
 
-.operators {
+.side-operators {
     flex-direction: column;
     flex: 0.2;
     gap: var(--button-gap-s);
 }
 
-.operators button {
-    flex-grow: 1;
+.side-operators button {
+    width: var(--button-width);
+    height: var(--button-width);
 }
 
-.bottom-row {
+.bottom-operators {
     flex: 1;
     align-self: stretch;
+    margin-top: var(--button-gap-s);
+    gap: var(--button-gap-s);
 }
 
-.bottom-row button {
-    flex: 1;
+.bottom-operators button {
+    width: var(--button-width);
+    height: var(--button-width);
 }
