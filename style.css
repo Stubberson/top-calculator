@@ -22,13 +22,13 @@ div {
 }
 
 .screen {
-    flex: 1;
     align-self: stretch;
+    align-items: center;
     justify-content: end;
-    align-items: end;
     border: 2px inset rgb(185, 202, 216);
     background-color: rgb(185, 202, 216);
-    padding: 12px;
+    height: calc(var(--button-width) - (2 * var(--button-gap-s)));
+    padding: var(--button-gap-s);
 }
 
 .top-operators {

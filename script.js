@@ -51,7 +51,7 @@ const bottomContainer = document.querySelector('.bottom-operators')
 const numericalsContainer = document.querySelector('.numericals')
 
 // Create screen
-screen.innerText = '000'
+screen.innerText = '0'
 
 // Math symbols, easier to remember as vars than unicode strings
 const multiSymbol = '\u00D7'
@@ -95,3 +95,30 @@ for (let row = 3; row > 0; row--) {
     numericalsContainer.appendChild(rowContainer)
 }
 
+// Update screen
+let clickNumber = 0
+calculator.addEventListener('click', (event) => {
+    // Only listen to buttons
+    if (event.target.nodeName === 'BUTTON') {
+        // Screen update
+        if (parseInt(event.target.innerText) || event.target.innerText === '0' || event.target.innerText === '.') {
+            // Only allow one decimal point
+            if (event.target.innerText === '.' && screen.innerText.includes('.')) {
+                return
+            }
+            // Clear the placeholder zero on first click
+            if (clickNumber === 0) {
+                screen.innerText = event.target.innerText
+                clickNumber += 1
+            } else {
+                screen.innerText += event.target.innerText
+                clickNumber += 1
+            }            
+        }
+        // Clear screen and memory
+        if (event.target.innerText === 'AC') {
+            screen.innerText = '0'
+            clickNumber = 0
+        }
+    }
+})
