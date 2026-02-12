@@ -1,3 +1,23 @@
+// Basic calculator layout
+const calculator = document.querySelector('.calculator')
+const screen = document.querySelector('.screen')
+const topContainer = document.querySelector('.top-operators')
+const sideContainer = document.querySelector('.side-operators')
+const bottomContainer = document.querySelector('.bottom-operators')
+const numericalsContainer = document.querySelector('.numericals')
+
+// Math symbols, easier to remember as vars than unicode strings
+const multiSymbol = '\u00D7'
+const divSymbol = '\u00F7'
+const sqrtSymbol = '\u221A'
+const expSymbol = 'x\u207f'
+
+const operators = ['AC', sqrtSymbol, expSymbol, divSymbol, multiSymbol, '-', '+', '0', '.', '=']
+const mathOperators = [sqrtSymbol, expSymbol, divSymbol, multiSymbol, '-', '+', '=']
+
+// Placeholder screen text
+screen.innerText = '0'
+
 // Basic functions
 function add(a, b) {
     return a + b
@@ -23,9 +43,6 @@ function exponent(a, b) {
     return a ** b
 }
 
-let firstNumber = 0
-let secondNumber = 0
-
 function operate(a, b, operator){
     if (operator === '+') {
         return add(a, b)
@@ -34,6 +51,9 @@ function operate(a, b, operator){
     } else if (operator === '\u00D7') {
         return multiply(a, b)
     } else if (operator === '\u00F7') {
+        if (b === 0) {
+            return screen.innerText = 'Snarky!'
+        }
         return divide(a, b)
     } else if (operator === '\u221A') {
         return sqrt(a)
@@ -42,25 +62,7 @@ function operate(a, b, operator){
     }
 }
 
-// Basic calculator layout
-const calculator = document.querySelector('.calculator')
-const screen = document.querySelector('.screen')
-const topContainer = document.querySelector('.top-operators')
-const sideContainer = document.querySelector('.side-operators')
-const bottomContainer = document.querySelector('.bottom-operators')
-const numericalsContainer = document.querySelector('.numericals')
-
-// Create screen
-screen.innerText = '0'
-
-// Math symbols, easier to remember as vars than unicode strings
-const multiSymbol = '\u00D7'
-const divSymbol = '\u00F7'
-const sqrtSymbol = '\u221A'
-const expSymbol = 'x\u207f'
-
 // Create operator buttons
-const operators = ['AC', sqrtSymbol, expSymbol, divSymbol, multiSymbol, '-', '+', '0', '.', '=']
 for (let i = 0; i < operators.length; i++) {
     const operButton = document.createElement('button')
     operButton.innerText = operators[i]
@@ -95,8 +97,12 @@ for (let row = 3; row > 0; row--) {
     numericalsContainer.appendChild(rowContainer)
 }
 
-// Update screen
-let clickNumber = 0
+// Functionality
+let firstNumber = 0
+let secondNumber = 0
+let clickInstance = 0
+let operatorClicked = false
+let previousOperator = undefined
 calculator.addEventListener('click', (event) => {
     // Only listen to buttons
     if (event.target.nodeName === 'BUTTON') {
@@ -106,19 +112,39 @@ calculator.addEventListener('click', (event) => {
             if (event.target.innerText === '.' && screen.innerText.includes('.')) {
                 return
             }
-            // Clear the placeholder zero on first click
-            if (clickNumber === 0) {
+            // Clear the screen on first click and after operator click
+            if (clickInstance === 0 || operatorClicked === true) {
                 screen.innerText = event.target.innerText
-                clickNumber += 1
+                clickInstance += 1
+                operatorClicked = false
             } else {
                 screen.innerText += event.target.innerText
-                clickNumber += 1
+                clickInstance += 1
             }            
         }
         // Clear screen and memory
         if (event.target.innerText === 'AC') {
             screen.innerText = '0'
-            clickNumber = 0
+            clickInstance = 0
+            firstNumber = 0
+            secondNumber = 0
+        }
+        // Calculations
+        if (mathOperators.includes(event.target.innerText)) {
+            operatorClicked = true
+            if (event.target.innerText !== '=') {
+                firstNumber = parseFloat(screen.innerText)
+                previousOperator = event.target.innerText
+            } else {
+                secondNumber = parseFloat(screen.innerText)
+                let result = operate(firstNumber, secondNumber, previousOperator)
+                screen.innerText = result
+                firstNumber = result
+                secondNumber = 0
+                // previousOperator = event.target.innerText
+            }
+            console.log(firstNumber)
+            console.log(secondNumber)
         }
     }
 })
