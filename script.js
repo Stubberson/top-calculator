@@ -46,20 +46,35 @@ function operate(a, b, operator){
 const calculator = document.querySelector('.calculator')
 const screen = document.querySelector('.screen')
 const topContainer = document.querySelector('.top-operators')
-const numerOperContainer = document.querySelector('.numericals-operators')
-const numericalsContainer = document.querySelector('.numericals')
-const sideOperatorContainer = document.querySelector('.side-operators')
+const sideContainer = document.querySelector('.side-operators')
 const bottomContainer = document.querySelector('.bottom-operators')
+const numericalsContainer = document.querySelector('.numericals')
 
 // Create screen
 screen.innerText = '000'
 
-// Create top operator row with AC, square root, exponent, and division
-const topOperators = ['AC', '\u221A', 'x\u207f', '\u00F7']
-for (let i = 0; i < topOperators.length; i++) {
-    const topButton = document.createElement('button')
-    topButton.innerText = topOperators[i]
-    topContainer.appendChild(topButton)
+// Math symbols, easier to remember as vars than unicode strings
+const multiSymbol = '\u00D7'
+const divSymbol = '\u00F7'
+const sqrtSymbol = '\u221A'
+const expSymbol = 'x\u207f'
+
+// Create operator buttons
+const operators = ['AC', sqrtSymbol, expSymbol, divSymbol, multiSymbol, '-', '+', '0', '.', '=']
+for (let i = 0; i < operators.length; i++) {
+    const operButton = document.createElement('button')
+    operButton.innerText = operators[i]
+    if (operators[i] === '=') {
+        operButton.id = 'equals'  // Permit equals-button modification
+    }
+    // Distribute buttons between the top and bottom rows, and side column
+    if (i < 4) {
+        topContainer.appendChild(operButton)
+    } else if (i > 3 && i < 7) {
+        sideContainer.appendChild(operButton)
+    } else {
+        bottomContainer.appendChild(operButton)
+    }
 }
 
 // Create numericals button grid 1-9
@@ -80,22 +95,3 @@ for (let row = 3; row > 0; row--) {
     numericalsContainer.appendChild(rowContainer)
 }
 
-// Create operators
-const sideOperators = ['\u00D7', '-', '+']
-for (let i = 0; i < sideOperators.length; i++) {
-    const operButton = document.createElement('button')
-    operButton.innerText = sideOperators[i]
-    sideOperatorContainer.appendChild(operButton)
-}
-
-// Create bottom row with zero, decimal, and equals
-const bottomOperators = ['0', '.', '=']
-for (let i = 0; i < bottomOperators.length; i++) {
-    const bottomButton = document.createElement('button')
-    bottomButton.innerText = bottomOperators[i]
-    // Add a class for the equals button for making it larger
-    if (i === 2) {
-        bottomButton.classList.add('equals')
-    }
-    bottomContainer.appendChild(bottomButton)
-}
