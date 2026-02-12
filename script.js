@@ -1,4 +1,4 @@
-// Basic calculator layout
+// Calculator layout
 const calculator = document.querySelector('.calculator')
 const screen = document.querySelector('.screen')
 const topContainer = document.querySelector('.top-operators')
@@ -22,27 +22,21 @@ screen.innerText = '0'
 function add(a, b) {
     return a + b
 }
-
 function subtract(a, b) {
     return a - b
 }
-
 function multiply(a, b) {
     return a * b
 }
-
 function divide(a, b){
     return a / b
 }
-
 function sqrt(a) {
     return Math.sqrt(a)
 }
-
 function exponent(a, b) {
     return a ** b
 }
-
 function countDecimals(a) {
     return a.toString().split(".")[1].length
 }
@@ -74,7 +68,7 @@ for (let i = 0; i < operators.length; i++) {
     const operButton = document.createElement('button')
     operButton.innerText = operators[i]
     if (operators[i] === '=') {
-        operButton.id = 'equals'  // Permit equals-button modification
+        operButton.id = 'equals'  // Permit equals-button to be modified
     }
     // Distribute buttons between the top and bottom rows, and side column
     if (i < 4) {
@@ -108,50 +102,48 @@ for (let row = 3; row > 0; row--) {
 let firstNumber = 0
 let secondNumber = 0
 let clickInstance = 0
+let numberClicked = false
 let operatorClicked = false
 let previousOperator = undefined
 calculator.addEventListener('click', (event) => {
     // Only listen to buttons
     if (event.target.nodeName === 'BUTTON') {
+        let clickedButton = event.target
         // Screen update
-        if (parseInt(event.target.innerText) || event.target.innerText === '0' || event.target.innerText === '.') {
+        if (parseInt(clickedButton.innerText) || clickedButton.innerText === '0' || clickedButton.innerText === '.') {
             // Only allow one decimal point
-            if (event.target.innerText === '.' && screen.innerText.includes('.')) {
+            if (clickedButton.innerText === '.' && screen.innerText.includes('.')) {
                 return
             }
-            // Clear the screen on first click or after operator click
-            if (clickInstance === 0 || operatorClicked === true) {
-                screen.innerText = event.target.innerText
+            // Don't fill screen with 0s
+            if (clickedButton.innerText === '0' && screen.innerText === '0') {
+                clickInstance += 1
+                return
+            // Display new number on first click or after operator click
+            } else if (clickInstance === 0 || operatorClicked === true) {
+                screen.innerText = clickedButton.innerText
                 clickInstance += 1
                 operatorClicked = false
             } else {
-                screen.innerText += event.target.innerText
+                screen.innerText += clickedButton.innerText
                 clickInstance += 1
             }            
         }
-        // Clear screen and memory
-        if (event.target.innerText === 'AC') {
-            screen.innerText = '0'
-            clickInstance = 0
-            firstNumber = 0
-            secondNumber = 0
-            operatorClicked = false
-            previousOperator = undefined
-        }
+        
         // Calculations
-        if (mathOperators.includes(event.target.innerText)) {
+        if (mathOperators.includes(clickedButton.innerText)) {
             operatorClicked = true
             let result = 0
-            if (event.target.innerText !== '=') {
+            if (clickedButton.innerText !== '=') {
                 // Let user combine multiple operators
                 if (previousOperator) {
                     secondNumber = parseFloat(screen.innerText)    
                     result = operate(firstNumber, secondNumber, previousOperator)
                     Number.isInteger(result) || (countDecimals(result) < 2) ? screen.innerText = result : screen.innerText = result.toFixed(2)
-                    previousOperator = event.target.innerText
+                    previousOperator = clickedButton.innerText
                 }
                 firstNumber = parseFloat(screen.innerText)
-                previousOperator = event.target.innerText
+                previousOperator = clickedButton.innerText
             } else {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
@@ -160,6 +152,16 @@ calculator.addEventListener('click', (event) => {
                 secondNumber = 0
                 previousOperator = undefined
             }
+        }
+
+        // Clear screen and memory
+        if (clickedButton.innerText === 'AC') {
+            screen.innerText = '0'
+            clickInstance = 0
+            firstNumber = 0
+            secondNumber = 0
+            operatorClicked = false
+            previousOperator = undefined
         }
     }
 })
