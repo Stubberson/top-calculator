@@ -22,17 +22,20 @@ div {
 }
 
 .screen {
+    flex: 1;
+    align-self: stretch;
     justify-content: end;
     align-items: end;
-    flex: 1;
     border: 2px inset rgb(185, 202, 216);
     background-color: rgb(185, 202, 216);
+    padding: 12px;
 }
 
 .top-operators {
     flex: 1;
     align-self: stretch;
     gap: var(--button-gap-s);
+    margin-top: var(--button-gap-l);
 }
 
 .top-operators button {
@@ -82,4 +85,8 @@ div {
 .bottom-operators button {
     width: var(--button-width);
     height: var(--button-width);
+}
+
+.bottom-operators .equals {
+    flex: 1;
 }

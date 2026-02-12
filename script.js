@@ -23,7 +23,6 @@ function exponent(a, b) {
     return a ** b
 }
 
-// Operations
 let firstNumber = 0
 let secondNumber = 0
 
