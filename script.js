@@ -158,7 +158,7 @@ calculator.addEventListener('click', (event) => {
                 Number.isInteger(result) || (countDecimals(result) < 2) ? screen.innerText = result : screen.innerText = result.toFixed(2)
                 firstNumber = result
                 secondNumber = 0
-                previousOperator = event.target.innerText
+                previousOperator = undefined
             }
         }
     }
