@@ -56,6 +56,9 @@ function operate(a, b, operator){
         }
         return divide(a, b)
     } else if (operator === '\u221A') {
+        if (a === 0 || b === 0) {
+            return screen.innerText = 'Snarky!'
+        }
         return sqrt(a)
     } else if (operator === 'x\u207f') {
         return exponent(a, b)
@@ -128,23 +131,24 @@ calculator.addEventListener('click', (event) => {
             clickInstance = 0
             firstNumber = 0
             secondNumber = 0
+            operatorClicked = false
         }
         // Calculations
         if (mathOperators.includes(event.target.innerText)) {
             operatorClicked = true
+            let result = 0
+            // 
             if (event.target.innerText !== '=') {
                 firstNumber = parseFloat(screen.innerText)
                 previousOperator = event.target.innerText
             } else {
                 secondNumber = parseFloat(screen.innerText)
-                let result = operate(firstNumber, secondNumber, previousOperator)
+                result = operate(firstNumber, secondNumber, previousOperator)
                 screen.innerText = result
                 firstNumber = result
                 secondNumber = 0
-                // previousOperator = event.target.innerText
+                previousOperator = event.target.innerText
             }
-            console.log(firstNumber)
-            console.log(secondNumber)
         }
     }
 })
