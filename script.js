@@ -115,7 +115,7 @@ calculator.addEventListener('click', (event) => {
             if (event.target.innerText === '.' && screen.innerText.includes('.')) {
                 return
             }
-            // Clear the screen on first click and after operator click
+            // Clear the screen on first click or after operator click
             if (clickInstance === 0 || operatorClicked === true) {
                 screen.innerText = event.target.innerText
                 clickInstance += 1
@@ -132,13 +132,20 @@ calculator.addEventListener('click', (event) => {
             firstNumber = 0
             secondNumber = 0
             operatorClicked = false
+            previousOperator = undefined
         }
         // Calculations
         if (mathOperators.includes(event.target.innerText)) {
             operatorClicked = true
             let result = 0
-            // 
             if (event.target.innerText !== '=') {
+                // Let user combine multiple operators
+                if (previousOperator) {
+                    secondNumber = parseFloat(screen.innerText)    
+                    result = operate(firstNumber, secondNumber, previousOperator)
+                    screen.innerText = result
+                    previousOperator = event.target.innerText
+                }
                 firstNumber = parseFloat(screen.innerText)
                 previousOperator = event.target.innerText
             } else {
