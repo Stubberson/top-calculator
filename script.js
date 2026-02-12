@@ -43,6 +43,10 @@ function exponent(a, b) {
     return a ** b
 }
 
+function countDecimals(a) {
+    return a.toString().split(".")[1].length
+}
+
 function operate(a, b, operator){
     if (operator === '+') {
         return add(a, b)
@@ -143,7 +147,7 @@ calculator.addEventListener('click', (event) => {
                 if (previousOperator) {
                     secondNumber = parseFloat(screen.innerText)    
                     result = operate(firstNumber, secondNumber, previousOperator)
-                    screen.innerText = result
+                    Number.isInteger(result) || (countDecimals(result) < 2) ? screen.innerText = result : screen.innerText = result.toFixed(2)
                     previousOperator = event.target.innerText
                 }
                 firstNumber = parseFloat(screen.innerText)
@@ -151,7 +155,7 @@ calculator.addEventListener('click', (event) => {
             } else {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
-                screen.innerText = result
+                Number.isInteger(result) || (countDecimals(result) < 2) ? screen.innerText = result : screen.innerText = result.toFixed(2)
                 firstNumber = result
                 secondNumber = 0
                 previousOperator = event.target.innerText
