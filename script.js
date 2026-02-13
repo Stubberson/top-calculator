@@ -13,10 +13,6 @@ const sqrtSymbol = '\u221A'
 const expSymbol = 'x\u207f'
 
 const operators = ['AC', sqrtSymbol, expSymbol, divSymbol, multiSymbol, '-', '+', '0', '.', '=']
-const mathOperators = [sqrtSymbol, expSymbol, divSymbol, multiSymbol, '-', '+', '=']
-
-// Placeholder screen text
-screen.innerText = '0'
 
 // Basic functions
 function add(a, b) {
@@ -48,34 +44,46 @@ function countDecimals(a) {
 }
 
 function operate(a, b, operator){
-    if (operator === '+') {
-        return add(a, b)
-    } else if (operator === '-') {
-        return subtract(a, b)
-    } else if (operator === '\u00D7') {
-        return multiply(a, b)
-    } else if (operator === '\u00F7') {
-        if (b === 0) {
-            return screen.innerText = 'Snarky!'
-        }
-        return divide(a, b)
-    } else if (operator === '\u221A') {
-        if (a === 0 || b === 0) {
-            return screen.innerText = 'Snarky!'
-        }
-        return sqrt(a)
-    } else if (operator === 'x\u207f') {
-        return exponent(a, b)
+    switch (operator) {
+        case '+':
+            return add(a, b)
+        case '-':
+            return subtract(a, b)
+        case '\u00D7':
+            return multiply(a, b)
+        case '\u00F7':
+            if (b === 0) {
+                return screen.innerText = 'Snarky!'
+            }
+            return divide(a, b)
+        case '\u221A':
+            if (a === 0 || b === 0) {
+                return screen.innerText = 'Snarky!'
+            }
+            return sqrt(a)
+        case 'x\u207f':
+            return exponent(a, b)
     }
 }
 
-// Create operator buttons
+// Create operator buttons (and '0')
 for (let i = 0; i < operators.length; i++) {
     const operButton = document.createElement('button')
     operButton.innerText = operators[i]
-    if (operators[i] === '=') {
-        operButton.id = 'equals'  // Permit equals-button modification
+    switch (operators[i]) {  // "Special" buttons
+        case '=':
+            operButton.classList.add('equals')
+            break
+        case 'AC':
+            operButton.classList.add('clear')
+            break
+        case '.':
+            operButton.classList.add('decimal')
+            break
+        case '0':
+            operButton.classList.add('numeric')
     }
+    
     // Distribute buttons between the top and bottom rows, and side column
     if (i < 4) {
         topContainer.appendChild(operButton)
@@ -92,6 +100,7 @@ for (let row = 3; row > 0; row--) {
     rowContainer.classList.add('num-row')
     for (let number = 1; number < 4; number++) {
         const numButton = document.createElement('button')
+        numButton.classList.add('numeric')
         if (row === 3) {
             numButton.innerText = number + 6
         } else if (row === 2) {
@@ -105,61 +114,128 @@ for (let row = 3; row > 0; row--) {
 }
 
 // Functionality
-let firstNumber = 0
-let secondNumber = 0
-let clickInstance = 0
-let operatorClicked = false
+let firstNumber = ''
+let secondNumber = ''
 let previousOperator = undefined
+let operatorInstance = 0
+let buttonMemory = [0]
+let result = 0
+
 calculator.addEventListener('click', (event) => {
     // Only listen to buttons
     if (event.target.nodeName === 'BUTTON') {
-        // Screen update
-        if (parseInt(event.target.innerText) || event.target.innerText === '0' || event.target.innerText === '.') {
-            // Only allow one decimal point
-            if (event.target.innerText === '.' && screen.innerText.includes('.')) {
+        let clickedButton = event.target
+        let clickedButtonClass = clickedButton.className
+        let lastClickedButton = buttonMemory[buttonMemory.length - 1]
+
+        // Display numeric inputs
+        if (clickedButtonClass === 'numeric' || clickedButtonClass === 'decimal') {
+            if ((clickedButton.innerText === '.' && screen.innerText.includes('.')) || 
+                (clickedButton.innerText !== '.' && screen.innerText === '0') ||
+                (screen.innerText.length > 16)) {
                 return
             }
-            // Clear the screen on first click or after operator click
-            if (clickInstance === 0 || operatorClicked === true) {
-                screen.innerText = event.target.innerText
-                clickInstance += 1
-                operatorClicked = false
-            } else {
-                screen.innerText += event.target.innerText
-                clickInstance += 1
-            }            
+            if (lastClickedButton.className === '' || screen.innerText === undefined || screen.innerText === 'Infinity') {
+                screen.innerText = ''
+            }
+            screen.innerText += clickedButton.innerText
         }
-        // Clear screen and memory
-        if (event.target.innerText === 'AC') {
-            screen.innerText = '0'
-            clickInstance = 0
-            firstNumber = 0
-            secondNumber = 0
-            operatorClicked = false
-            previousOperator = undefined
-        }
-        // Calculations
-        if (mathOperators.includes(event.target.innerText)) {
-            operatorClicked = true
-            let result = 0
-            if (event.target.innerText !== '=') {
-                // Let user combine multiple operators
-                if (previousOperator) {
-                    secondNumber = parseFloat(screen.innerText)    
-                    result = operate(firstNumber, secondNumber, previousOperator)
-                    Number.isInteger(result) || (countDecimals(result) < 2) ? screen.innerText = result : screen.innerText = result.toFixed(2)
-                    previousOperator = event.target.innerText
-                }
+        
+        // Operator click
+        if (clickedButtonClass === '' && lastClickedButton.className !== '') {
+            operatorInstance++
+            if (operatorInstance === 1) {
                 firstNumber = parseFloat(screen.innerText)
-                previousOperator = event.target.innerText
             } else {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
-                Number.isInteger(result) || (countDecimals(result) < 2) ? screen.innerText = result : screen.innerText = result.toFixed(2)
                 firstNumber = result
-                secondNumber = 0
-                previousOperator = undefined
+                screen.innerText = result
+            }
+            previousOperator = clickedButton.innerText
+        }
+
+        // End result
+        if (clickedButtonClass === 'equals') {
+            if (lastClickedButton.className === 'equals') {  // Allow repeated result
+                result = operate(result, secondNumber, previousOperator)
+                screen.innerText = result
+            } else {
+                secondNumber = parseFloat(screen.innerText)
+                console.log(firstNumber, secondNumber)
+                result = operate(firstNumber, secondNumber, previousOperator)
+                screen.innerText = result
+                operatorInstance = 0
             }
         }
+
+        // All Clear
+        if (clickedButton.innerText === 'AC') {
+            screen.innerText = ''
+            firstNumber = ''
+            secondNumber = ''
+            operatorInstance = 0
+            previousOperator = undefined
+            buttonMemory = [0]
+        }
+
+        // Push the clicked button to memory
+        buttonMemory.push(clickedButton)
     }
 })
+
+
+
+
+// calculator.addEventListener('click', (event) => {
+//     // Only listen to buttons
+//     if (event.target.nodeName === 'BUTTON') {
+//         // Screen update
+//         if (parseInt(event.target.innerText) || event.target.innerText === '0' || event.target.innerText === '.') {
+//             // Only allow one decimal point
+//             if (event.target.innerText === '.' && screen.innerText.includes('.')) {
+//                 return
+//             }
+//             // Clear the screen on first click or after operator click
+//             if (clickInstance === 0 || operatorClicked === true) {
+//                 screen.innerText = event.target.innerText
+//                 clickInstance += 1
+//                 operatorClicked = false
+//             } else {
+//                 screen.innerText += event.target.innerText
+//                 clickInstance += 1
+//             }            
+//         }
+//         // Clear screen and memory
+//         if (event.target.innerText === 'AC') {
+//             screen.innerText = '0'
+//             clickInstance = 0
+//             firstNumber = 0
+//             secondNumber = 0
+//             operatorClicked = false
+//             previousOperator = undefined
+//         }
+//         // Calculations
+//             operatorClicked = true
+//             let result = 0
+//             if (event.target.innerText !== '=') {
+//                 // Let user combine multiple operators
+//                 if (previousOperator) {
+//                     secondNumber = parseFloat(screen.innerText)    
+//                     result = operate(firstNumber, secondNumber, previousOperator)
+//                     Number.isInteger(result) || (countDecimals(result) < 2) ? screen.innerText = result : screen.innerText = result.toFixed(2)
+//                     previousOperator = event.target.innerText
+//                 }
+//                 firstNumber = parseFloat(screen.innerText)
+//                 previousOperator = event.target.innerText
+//             } else {
+//                 secondNumber = parseFloat(screen.innerText)
+//                 result = operate(firstNumber, secondNumber, previousOperator)
+//                 Number.isInteger(result) || (countDecimals(result) < 2) ? screen.innerText = result : screen.innerText = result.toFixed(2)
+//                 firstNumber = result
+//                 secondNumber = 0
+//                 previousOperator = undefined
+//             }
+//         }
+//     }
+// })

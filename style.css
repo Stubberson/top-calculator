@@ -87,6 +87,6 @@ div {
     height: var(--button-width);
 }
 
-.bottom-operators #equals {
+.bottom-operators .equals {
     flex: 1;
 }
