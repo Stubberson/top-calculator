@@ -17,18 +17,20 @@ div {
 button {
     font-size: 18px;
     color: #EEEEEE;
-    background-color:#414c59;
+    background-color:#303841;
     border: 0;
     border-radius: 20%;
     width: var(--button-width);
     height: var(--button-width);
     cursor: pointer;
-    box-shadow: 1px 1px 5px #1b1f24;
+    box-shadow: -1px -1px 1px 0.5px #3c4652, 1px 1px 1px 0.5px #1b2025;
 }
 
 button.numeric {
-    color: #414c59;
+    color: #303841;
     background-color: #EEEEEE;
+    box-shadow: 1px 1px 1px 0.5px #1b2025;
+    
 }
 
 button:hover {
