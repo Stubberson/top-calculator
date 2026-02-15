@@ -9,10 +9,9 @@ const numericalsContainer = document.querySelector('.numericals')
 // Math symbols, easier to remember as vars than unicode strings
 const multiSymbol = '\u00D7'
 const divSymbol = '\u00F7'
-const sqrtSymbol = '\u221A'
 const expSymbol = 'x\u207f'
 
-const operators = ['AC', sqrtSymbol, expSymbol, divSymbol, multiSymbol, '-', '+', '0', '.', '=']
+const operators = ['AC', 'C', expSymbol, divSymbol, multiSymbol, '-', '+', '0', '.', '=']
 
 // Basic functions
 function add(a, b) {
@@ -29,10 +28,6 @@ function multiply(a, b) {
 
 function divide(a, b){
     return a / b
-}
-
-function sqrt(a) {
-    return Math.sqrt(a)
 }
 
 function exponent(a, b) {
@@ -56,11 +51,6 @@ function operate(a, b, operator){
                 return screen.innerText = 'Snarky!'
             }
             return divide(a, b)
-        case '\u221A':
-            if (a === 0 || b === 0) {
-                return screen.innerText = 'Snarky!'
-            }
-            return sqrt(a)
         case 'x\u207f':
             return exponent(a, b)
     }
@@ -75,6 +65,9 @@ for (let i = 0; i < operators.length; i++) {
             operButton.classList.add('equals')
             break
         case 'AC':
+            operButton.classList.add('all-clear')
+            break
+        case 'C':
             operButton.classList.add('clear')
             break
         case '.':
@@ -130,12 +123,18 @@ calculator.addEventListener('click', (event) => {
 
         // Display numeric inputs
         if (clickedButtonClass === 'numeric' || clickedButtonClass === 'decimal') {
+            // Do not allow edge cases
             if ((clickedButton.innerText === '.' && screen.innerText.includes('.')) || 
-                (clickedButton.innerText !== '.' && screen.innerText === '0') ||
-                (screen.innerText.length > 16)) {
+                (clickedButton.innerText === '.' && screen.innerText === '') ||
+                (clickedButton.innerText !== '.' && (screen.innerText === '0' && result !== 0)) ||
+                (screen.innerText.length > 16 && lastClickedButton.className !== '')) {
                 return
             }
-            if (lastClickedButton.className === '' || screen.innerText === undefined || screen.innerText === 'Infinity') {
+            // Clear the display after certain actions
+            if (lastClickedButton.className === '' || 
+                lastClickedButton.className === 'equals' ||
+                screen.innerText === undefined || 
+                screen.innerText === 'Infinity') {
                 screen.innerText = ''
             }
             screen.innerText += clickedButton.innerText
@@ -143,6 +142,7 @@ calculator.addEventListener('click', (event) => {
         
         // Operator click
         if (clickedButtonClass === '' && lastClickedButton.className !== '') {
+            if (screen.innerText === '') return
             operatorInstance++
             if (operatorInstance === 1) {
                 firstNumber = parseFloat(screen.innerText)
@@ -157,20 +157,25 @@ calculator.addEventListener('click', (event) => {
 
         // End result
         if (clickedButtonClass === 'equals') {
+            if (screen.innerText === '' || firstNumber === '') return
             if (lastClickedButton.className === 'equals') {  // Allow repeated result
                 result = operate(result, secondNumber, previousOperator)
                 screen.innerText = result
             } else {
                 secondNumber = parseFloat(screen.innerText)
-                console.log(firstNumber, secondNumber)
                 result = operate(firstNumber, secondNumber, previousOperator)
                 screen.innerText = result
                 operatorInstance = 0
             }
         }
 
+        // Clear previous input
+        if (clickedButtonClass === 'clear') {
+            screen.innerText = screen.innerText.slice(0, screen.innerText.length - 1)
+        }
+
         // All Clear
-        if (clickedButton.innerText === 'AC') {
+        if (clickedButtonClass === 'all-clear') {
             screen.innerText = ''
             firstNumber = ''
             secondNumber = ''
