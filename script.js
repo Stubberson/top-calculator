@@ -34,7 +34,7 @@ function exponent(a, b) {
 }
 
 function countDecimals(a) {
-    return a.toString().split(".")[1].length
+    return Number.isInteger(a) ? 1 : a.toString().split(".")[1].length
 }
 
 function operate(a, b, operator){
@@ -125,8 +125,8 @@ calculator.addEventListener('click', (event) => {
             // Do not allow edge cases
             if ((clickedButton.innerText === '.' && screen.innerText.includes('.')) || 
                 (clickedButton.innerText === '.' && screen.innerText === '') ||
-                (clickedButton.innerText !== '.' && (screen.innerText === '0' && result !== 0)) ||
-                (screen.innerText.length > 16 && lastClickedButton.className !== '')) {
+                (clickedButton.innerText === '0' && screen.innerText === '0') ||
+                (screen.innerText.length > 13 && lastClickedButton.className !== '')) {
                 return
             }
             
@@ -134,7 +134,8 @@ calculator.addEventListener('click', (event) => {
             if (lastClickedButton.className === '' || 
                 (lastClickedButton.className === 'equals' && clickedButtonClass === 'numeric') ||
                 screen.innerText === undefined || 
-                screen.innerText === 'Infinity') {
+                screen.innerText === 'Infinity' ||
+                (clickedButton.innerText !== '.' && screen.innerText === '0')) {
                 screen.innerText = ''
             }
             screen.innerText += clickedButton.innerText
@@ -165,14 +166,14 @@ calculator.addEventListener('click', (event) => {
             if (screen.innerText === '' || firstNumber === '' || lastClickedButton.className === '') return
             if (lastClickedButton.className === 'equals') {  // Allow repeated result
                 result = operate(result, secondNumber, previousOperator)
-                screen.innerText = result
+                countDecimals(result) === 'undefined'  < 13 ? screen.innerText = result : screen.innerText = result.toPrecision(7)
                 buttonMemory.forEach(btn => {
                     btn.disabled = false 
                 })
             } else {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
-                screen.innerText = result
+                countDecimals(result) < 13 ? screen.innerText = result : screen.innerText = result.toPrecision(7)
                 operatorInstance = 0
             }
         }

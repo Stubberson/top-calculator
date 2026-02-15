@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 :root {
@@ -13,22 +14,60 @@ div {
     display: flex;
 }
 
+button {
+    font-size: 18px;
+    color: #EEEEEE;
+    background-color:#414c59;
+    border: 0;
+    border-radius: 20%;
+    width: var(--button-width);
+    height: var(--button-width);
+    cursor: pointer;
+    box-shadow: 1px 1px 5px #1b1f24;
+}
+
+button.numeric {
+    color: #414c59;
+    background-color: #EEEEEE;
+}
+
+button:hover {
+    opacity: 0.9;
+    background-color:#5e6c7d;
+}
+
+button.numeric:hover {
+    background-color:#d1d1d1;
+}
+
+button:disabled {
+    opacity: 0.3;
+}
+
 .calculator {
     flex-direction: column;
     justify-self: center;
     align-items: center;
     margin-top: var(--button-gap-l);
-    background-color: aliceblue;
+    
+    background-color: #303841;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 3px 6px 12px #414c59;
 }
 
 .screen {
     align-self: stretch;
     align-items: center;
     justify-content: end;
-    border: 2px inset rgb(185, 202, 216);
-    background-color: rgb(185, 202, 216);
+
+    border-radius: 6px;
+    background-color: #EEEEEE;
     height: calc(var(--button-width) - (2 * var(--button-gap-s)));
     padding: var(--button-gap-s);
+    box-shadow: inset 5px 3px 5px #a2a2a2;
+
+    font-size: 20px;
 }
 
 .top-operators {
@@ -36,11 +75,6 @@ div {
     align-self: stretch;
     gap: var(--button-gap-s);
     margin-top: var(--button-gap-l);
-}
-
-.top-operators button {
-    width: var(--button-width);
-    height: var(--button-width);
 }
 
 .numericals-operators {
@@ -59,20 +93,10 @@ div {
     gap: var(--button-gap-s);
 }
 
-.numericals button {
-    width: var(--button-width);
-    height: var(--button-width);
-}
-
 .side-operators {
     flex-direction: column;
     flex: 0.2;
     gap: var(--button-gap-s);
-}
-
-.side-operators button {
-    width: var(--button-width);
-    height: var(--button-width);
 }
 
 .bottom-operators {
@@ -82,11 +106,9 @@ div {
     gap: var(--button-gap-s);
 }
 
-.bottom-operators button {
-    width: var(--button-width);
-    height: var(--button-width);
-}
-
 .bottom-operators .equals {
     flex: 1;
+    border-radius: 10px;
+    color: #EEEEEE;
+    background-color: #FF5722;
 }
