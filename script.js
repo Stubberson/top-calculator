@@ -10,7 +10,6 @@ const numericalsContainer = document.querySelector('.numericals')
 const multiSymbol = '\u00D7'
 const divSymbol = '\u00F7'
 const expSymbol = 'x\u207f'
-
 const operators = ['AC', 'C', expSymbol, divSymbol, multiSymbol, '-', '+', '0', '.', '=']
 
 // Basic functions
@@ -130,20 +129,24 @@ calculator.addEventListener('click', (event) => {
                 (screen.innerText.length > 16 && lastClickedButton.className !== '')) {
                 return
             }
-            // Clear the display after certain actions
+            
+            // Clear display
             if (lastClickedButton.className === '' || 
-                lastClickedButton.className === 'equals' ||
+                (lastClickedButton.className === 'equals' && clickedButtonClass === 'numeric') ||
                 screen.innerText === undefined || 
                 screen.innerText === 'Infinity') {
                 screen.innerText = ''
             }
             screen.innerText += clickedButton.innerText
+            buttonMemory.forEach(btn => {  // Enable operators
+               btn.disabled = false 
+            })
         }
         
         // Operator click
-        if (clickedButtonClass === '' && lastClickedButton.className !== '') {
+        if (clickedButtonClass === '') {
             if (screen.innerText === '') return
-            operatorInstance++
+            if (lastClickedButton.className !== '') operatorInstance++
             if (operatorInstance === 1) {
                 firstNumber = parseFloat(screen.innerText)
             } else {
@@ -153,14 +156,19 @@ calculator.addEventListener('click', (event) => {
                 screen.innerText = result
             }
             previousOperator = clickedButton.innerText
+            clickedButton.disabled = true
+            lastClickedButton.disabled = false  // In case user misclicked operator
         }
 
         // End result
         if (clickedButtonClass === 'equals') {
-            if (screen.innerText === '' || firstNumber === '') return
+            if (screen.innerText === '' || firstNumber === '' || lastClickedButton.className === '') return
             if (lastClickedButton.className === 'equals') {  // Allow repeated result
                 result = operate(result, secondNumber, previousOperator)
                 screen.innerText = result
+                buttonMemory.forEach(btn => {
+                    btn.disabled = false 
+                })
             } else {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
@@ -181,6 +189,9 @@ calculator.addEventListener('click', (event) => {
             secondNumber = ''
             operatorInstance = 0
             previousOperator = undefined
+            buttonMemory.forEach(btn => {
+               btn.disabled = false 
+            })
             buttonMemory = [0]
         }
 
