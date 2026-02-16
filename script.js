@@ -34,7 +34,7 @@ function exponent(a, b) {
 }
 
 function countDecimals(a) {
-    return Number.isInteger(a) ? 1 : a.toString().split(".")[1].length
+    return Number.isInteger(a) ? 0 : a.toString().split(".")[1].length
 }
 
 function operate(a, b, operator){
@@ -113,6 +113,7 @@ let operatorInstance = 0
 let buttonMemory = [0]
 let result = 0
 
+// Clicks
 calculator.addEventListener('click', (event) => {
     // Only listen to buttons
     if (event.target.nodeName === 'BUTTON') {
@@ -126,7 +127,7 @@ calculator.addEventListener('click', (event) => {
             if ((clickedButton.innerText === '.' && screen.innerText.includes('.')) || 
                 (clickedButton.innerText === '.' && screen.innerText === '') ||
                 (clickedButton.innerText === '0' && screen.innerText === '0') ||
-                (screen.innerText.length > 13 && lastClickedButton.className !== '')) {
+                (screen.innerText.length > 10 && lastClickedButton.className !== '')) {
                 return
             }
             
@@ -166,14 +167,14 @@ calculator.addEventListener('click', (event) => {
             if (screen.innerText === '' || firstNumber === '' || lastClickedButton.className === '') return
             if (lastClickedButton.className === 'equals') {  // Allow repeated result
                 result = operate(result, secondNumber, previousOperator)
-                countDecimals(result) === 'undefined'  < 13 ? screen.innerText = result : screen.innerText = result.toPrecision(7)
+                countDecimals(result) < 5 ? screen.innerText = result : screen.innerText = result.toPrecision(3)
                 buttonMemory.forEach(btn => {
                     btn.disabled = false 
                 })
             } else {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
-                countDecimals(result) < 13 ? screen.innerText = result : screen.innerText = result.toPrecision(7)
+                countDecimals(result) < 5 ? screen.innerText = result : screen.innerText = result.toPrecision(3)
                 operatorInstance = 0
             }
         }

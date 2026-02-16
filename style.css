@@ -16,7 +16,7 @@ div {
 
 button {
     font-size: 18px;
-    color: #EEEEEE;
+    color: #ededed;
     background-color:#303841;
     border: 0;
     border-radius: 20%;
@@ -26,6 +26,10 @@ button {
     box-shadow: -1px -1px 1px 0.5px #3c4652, 1px 1px 1px 0.5px #1b2025;
 }
 
+button:hover:enabled {
+    opacity: 0.6;
+}
+
 button.numeric {
     color: #303841;
     background-color: #EEEEEE;
@@ -33,13 +37,9 @@ button.numeric {
     
 }
 
-button:hover {
-    opacity: 0.9;
-    background-color:#5e6c7d;
-}
-
 button.numeric:hover {
-    background-color:#d1d1d1;
+    opacity: 1;
+    box-shadow: inset 1px 1px 0.5px #1b2025;
 }
 
 button:disabled {
