@@ -155,7 +155,7 @@ calculator.addEventListener('click', (event) => {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
                 firstNumber = result
-                screen.innerText = result
+                countLength(result) < 10 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(3)
             }
             previousOperator = clickedButton.innerText
             clickedButton.disabled = true
