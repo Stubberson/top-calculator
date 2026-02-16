@@ -33,8 +33,8 @@ function exponent(a, b) {
     return a ** b
 }
 
-function countDecimals(a) {
-    return Number.isInteger(a) ? 0 : a.toString().split(".")[1].length
+function countLength(a) {
+    return a.toString().length
 }
 
 function operate(a, b, operator){
@@ -47,7 +47,7 @@ function operate(a, b, operator){
             return multiply(a, b)
         case '\u00F7':
             if (b === 0) {
-                return screen.innerText = 'Snarky!'
+                return screen.innerText = 'Snerky!'
             }
             return divide(a, b)
         case 'x\u207f':
@@ -167,21 +167,22 @@ calculator.addEventListener('click', (event) => {
             if (screen.innerText === '' || firstNumber === '' || lastClickedButton.className === '') return
             if (lastClickedButton.className === 'equals') {  // Allow repeated result
                 result = operate(result, secondNumber, previousOperator)
-                countDecimals(result) < 5 ? screen.innerText = result : screen.innerText = result.toPrecision(3)
+                countLength(result) < 10 ? screen.innerText = result : screen.innerText = result.toPrecision(3)
                 buttonMemory.forEach(btn => {
                     btn.disabled = false 
                 })
             } else {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
-                countDecimals(result) < 5 ? screen.innerText = result : screen.innerText = result.toPrecision(3)
+                countLength(result) < 10 ? screen.innerText = result : screen.innerText = result.toPrecision(3)
                 operatorInstance = 0
             }
         }
 
         // Clear previous input
         if (clickedButtonClass === 'clear') {
-            screen.innerText = screen.innerText.slice(0, screen.innerText.length - 1)
+            // Clear the last digit. If there's text, clear all
+            !screen.innerText.includes('ne') ? screen.innerText = screen.innerText.slice(0, screen.innerText.length - 1) : clickedButtonClass = 'all-clear'
         }
 
         // All Clear
