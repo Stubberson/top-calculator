@@ -167,14 +167,14 @@ calculator.addEventListener('click', (event) => {
             if (screen.innerText === '' || firstNumber === '' || lastClickedButton.className === '') return
             if (lastClickedButton.className === 'equals') {  // Allow repeated result
                 result = operate(result, secondNumber, previousOperator)
-                countLength(result) < 10 ? screen.innerText = result : screen.innerText = result.toPrecision(3)
+                countLength(result) < 10 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(3)
                 buttonMemory.forEach(btn => {
                     btn.disabled = false 
                 })
             } else {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
-                countLength(result) < 10 ? screen.innerText = result : screen.innerText = result.toPrecision(3)
+                countLength(result) < 10 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(3)
                 operatorInstance = 0
             }
         }
