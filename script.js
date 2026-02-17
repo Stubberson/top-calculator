@@ -5,14 +5,14 @@ const topContainer = document.querySelector('.top-operators')
 const sideContainer = document.querySelector('.side-operators')
 const bottomContainer = document.querySelector('.bottom-operators')
 const numericalsContainer = document.querySelector('.numericals')
+let buttons = calculator.getElementsByTagName('button')
 
-// Math symbols, easier to remember as vars than unicode strings
 const multiSymbol = '\u00D7'
 const divSymbol = '\u00F7'
 const expSymbol = 'x\u207f'
 const operators = ['AC', 'C', expSymbol, divSymbol, multiSymbol, '-', '+', '0', '.', '=']
 
-// Basic functions
+// --- BASIC MATHS ---
 function add(a, b) {
     return a + b
 }
@@ -34,7 +34,8 @@ function exponent(a, b) {
 }
 
 function countLength(a) {
-    return a.toString().length
+    b = a.toString().length
+    return b
 }
 
 function operate(a, b, operator){
@@ -47,7 +48,7 @@ function operate(a, b, operator){
             return multiply(a, b)
         case '\u00F7':
             if (b === 0) {
-                return screen.innerText = 'Snerky!'
+                return 'Snerky!'
             }
             return divide(a, b)
         case 'x\u207f':
@@ -55,7 +56,7 @@ function operate(a, b, operator){
     }
 }
 
-// Create operator buttons (and '0')
+// --- CREATE HTML ---
 for (let i = 0; i < operators.length; i++) {
     const operButton = document.createElement('button')
     operButton.innerText = operators[i]
@@ -105,78 +106,129 @@ for (let row = 3; row > 0; row--) {
     numericalsContainer.appendChild(rowContainer)
 }
 
-// Functionality
+buttons = Array.from(buttons)
+
+// --- FUNCTIONALITY ---
 let firstNumber = ''
 let secondNumber = ''
 let previousOperator = undefined
 let operatorInstance = 0
-let buttonMemory = [0]
+let inputClassMemory = [0]
+let lastInputClass = undefined
+let keyMemory = [0]
+let lastKey = undefined
 let result = 0
+
+function getInputType(event) {
+    return event instanceof KeyboardEvent ? event.key : event.target
+}
+
+function userInput(inputText, inputClass) {
+    // Do not allow edge cases
+    if ((inputText === '.' && screen.innerText.includes('.')) || 
+        (inputText === '.' && screen.innerText === '') ||
+        (inputText === '0' && screen.innerText === '0') ||
+        (screen.innerText.length > 13 && lastInputClass !== '')) {
+        return
+    }
+
+    // Clear display
+    if (lastInputClass === '' || 
+        (lastInputClass === 'equals' && inputClass === 'numeric') ||
+        (inputText !== '.' && screen.innerText === '0') ||
+        screen.innerText === undefined || 
+        screen.innerText === 'Infinity') {
+        screen.innerText = ''
+    }
+    screen.innerText += inputText
+    buttons.forEach(btn => {  // Enable operator
+        btn.disabled = false
+    })
+}
+
+function operatorInput(inputText) {
+    if (screen.innerText === '') return
+    previousOperator = inputText
+
+    buttons.forEach(btn => {
+        if (btn.innerText === inputText) {
+            btn.disabled = true
+        }
+        if (btn.innerText === lastKey) {   // Enable operator if there was operator misclick
+            btn.disabled = false
+        }
+    })
+
+    if (lastInputClass === '') return
+    operatorInstance++
+    if (operatorInstance === 1) {
+        firstNumber = parseFloat(screen.innerText)
+    } else {
+        secondNumber = parseFloat(screen.innerText)
+        result = operate(firstNumber, secondNumber, previousOperator)
+        firstNumber = result
+        countLength(result) < 14 ? screen.innerText = result : screen.innerText = result.toExponential(3)
+    }
+}
+
+function getResult() {
+    if (screen.innerText === '' || firstNumber === '' || lastInputClass === '') return
+    if (lastInputClass === 'equals') {  // Allow repeated result
+        result = operate(result, secondNumber, previousOperator)
+        countLength(result) < 14 ? screen.innerText = result : screen.innerText = result.toExponential(3)
+        buttons.forEach(btn => {
+            btn.disabled = false 
+        })
+    } else {
+        secondNumber = parseFloat(screen.innerText)
+        result = operate(firstNumber, secondNumber, previousOperator)
+        if (countLength(result) < 13) {
+            screen.innerText = result
+        } else {
+            screen.innerText = result.toExponential(3)
+        }
+        operatorInstance = 0
+    }
+}
+
+function clearAll() {
+    screen.innerText = ''
+    firstNumber = ''
+    secondNumber = ''
+    operatorInstance = 0
+    previousOperator = undefined
+    keyMemory = [0]
+    lastKey = undefined
+    inputClassMemory = [0]
+    lastInputClass = undefined
+    buttons.forEach(btn => {
+        btn.disabled = false 
+    })
+}
+
 
 // Clicks
 calculator.addEventListener('click', (event) => {
     // Only listen to buttons
     if (event.target.nodeName === 'BUTTON') {
-        let clickedButton = event.target
+        let clickedButton = getInputType(event)
         let clickedButtonClass = clickedButton.className
-        let lastClickedButton = buttonMemory[buttonMemory.length - 1]
+        lastKey = keyMemory[keyMemory.length - 1]
+        lastInputClass = inputClassMemory[inputClassMemory.length - 1]
 
         // Display numeric inputs
         if (clickedButtonClass === 'numeric' || clickedButtonClass === 'decimal') {
-            // Do not allow edge cases
-            if ((clickedButton.innerText === '.' && screen.innerText.includes('.')) || 
-                (clickedButton.innerText === '.' && screen.innerText === '') ||
-                (clickedButton.innerText === '0' && screen.innerText === '0') ||
-                (screen.innerText.length > 13 && lastClickedButton.className !== '')) {
-                return
-            }
-            
-            // Clear display
-            if (lastClickedButton.className === '' || 
-                (lastClickedButton.className === 'equals' && clickedButtonClass === 'numeric') ||
-                screen.innerText === undefined || 
-                screen.innerText === 'Infinity' ||
-                (clickedButton.innerText !== '.' && screen.innerText === '0')) {
-                screen.innerText = ''
-            }
-            screen.innerText += clickedButton.innerText
-            buttonMemory.forEach(btn => {  // Enable operators
-               btn.disabled = false 
-            })
+            userInput(clickedButton.innerText, clickedButtonClass)
         }
         
         // Operator click
         if (clickedButtonClass === '') {
-            if (screen.innerText === '') return
-            if (lastClickedButton.className !== '') operatorInstance++
-            if (operatorInstance === 1) {
-                firstNumber = parseFloat(screen.innerText)
-            } else {
-                secondNumber = parseFloat(screen.innerText)
-                result = operate(firstNumber, secondNumber, previousOperator)
-                firstNumber = result
-                countLength(result) < 13 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(2)
-            }
-            previousOperator = clickedButton.innerText
-            clickedButton.disabled = true
-            lastClickedButton.disabled = false  // In case user misclicked operator
+            operatorInput(clickedButton.innerText)
         }
 
         // End result
         if (clickedButtonClass === 'equals') {
-            if (screen.innerText === '' || firstNumber === '' || lastClickedButton.className === '') return
-            if (lastClickedButton.className === 'equals') {  // Allow repeated result
-                result = operate(result, secondNumber, previousOperator)
-                countLength(result) < 13 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(2)
-                buttonMemory.forEach(btn => {
-                    btn.disabled = false 
-                })
-            } else {
-                secondNumber = parseFloat(screen.innerText)
-                result = operate(firstNumber, secondNumber, previousOperator)
-                countLength(result) < 13 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(3)
-                operatorInstance = 0
-            }
+            getResult()
         }
 
         // Clear previous input
@@ -186,18 +238,67 @@ calculator.addEventListener('click', (event) => {
 
         // All Clear
         if (clickedButtonClass === 'all-clear') {
-            screen.innerText = ''
-            firstNumber = ''
-            secondNumber = ''
-            operatorInstance = 0
-            previousOperator = undefined
-            buttonMemory.forEach(btn => {
-               btn.disabled = false 
-            })
-            buttonMemory = [0]
+            clearAll()
         }
 
         // Push the clicked button to memory
-        buttonMemory.push(clickedButton)
+        inputClassMemory.push(clickedButtonClass)
+        keyMemory.push(clickedButton.innerText)
+    }
+})
+
+// Keyboard
+document.addEventListener('keydown', (event) => {
+    let pushedKey = getInputType(event)
+    let pushedKeyClass = undefined
+    lastKey = keyMemory[keyMemory.length - 1]
+    lastInputClass = inputClassMemory[inputClassMemory.length - 1]
+
+    // User input
+    if (parseInt(pushedKey) || pushedKey === '0' || pushedKey === '.') {
+        pushedKey === '.' ? pushedKeyClass = 'decimal' : pushedKeyClass = 'numeric'
+        userInput(pushedKey, pushedKeyClass)
+
+        keyMemory.push(pushedKey)
+        inputClassMemory.push(pushedKeyClass)
+    }
+
+    // Operators
+    const mathOperators = ['+', '-', '/', '*', 'e']
+    if (mathOperators.includes(pushedKey)) {
+        pushedKeyClass = ''
+        switch (pushedKey) {
+            case '/':
+                pushedKey = divSymbol
+                break
+            case '*':
+                pushedKey = multiSymbol
+                break
+            case 'e':
+                pushedKey = expSymbol
+        }
+        if (pushedKey === lastKey) return
+        operatorInput(pushedKey)
+
+        keyMemory.push(pushedKey)
+        inputClassMemory.push(pushedKeyClass)
+    }
+
+    // Result
+    if (pushedKey === 'Enter') {
+        pushedKeyClass = 'equals'
+        getResult()
+
+        inputClassMemory.push(pushedKeyClass)
+    }
+
+    // Clear
+    if (pushedKey === 'Backspace') {
+        screen.innerText = ''
+    }
+
+    // All Clear
+    if (pushedKey === 'a') {
+        clearAll()
     }
 })
