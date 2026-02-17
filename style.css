@@ -1,7 +1,6 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 :root {
@@ -10,8 +9,24 @@
     --button-gap-s: 4px;
 }
 
+
 div {
     display: flex;
+}
+
+.intro {
+    margin-top: 24px;
+    justify-self: center;
+    flex-direction: column;
+    width: calc(10 * var(--button-width));
+}
+
+ul {
+    margin-left: 36px;
+}
+
+li {
+    padding-top: 4px;
 }
 
 button {
@@ -47,10 +62,12 @@ button:disabled {
 }
 
 .calculator {
+    font-family: Verdana;
+
     flex-direction: column;
     justify-self: center;
     align-items: center;
-    margin-top: var(--button-gap-l);
+    margin-top: calc(2 * var(--button-gap-l));
     
     background-color: #303841;
     border-radius: 10px;
