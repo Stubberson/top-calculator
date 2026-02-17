@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -15,10 +17,19 @@ div {
 }
 
 .intro {
-    margin-top: 24px;
+    margin-top: 12px;
     justify-self: center;
     flex-direction: column;
     width: calc(10 * var(--button-width));
+    font-family: "Atkinson Hyperlegible", sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+p {
+    margin-top: 12px;
 }
 
 ul {
@@ -27,6 +38,12 @@ ul {
 
 li {
     padding-top: 4px;
+}
+
+code {
+    padding: 2px;
+    background-color: #EEEEEE;
+    border-radius: 3px;
 }
 
 button {
