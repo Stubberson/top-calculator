@@ -127,7 +127,7 @@ calculator.addEventListener('click', (event) => {
             if ((clickedButton.innerText === '.' && screen.innerText.includes('.')) || 
                 (clickedButton.innerText === '.' && screen.innerText === '') ||
                 (clickedButton.innerText === '0' && screen.innerText === '0') ||
-                (screen.innerText.length > 10 && lastClickedButton.className !== '')) {
+                (screen.innerText.length > 13 && lastClickedButton.className !== '')) {
                 return
             }
             
@@ -155,7 +155,7 @@ calculator.addEventListener('click', (event) => {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
                 firstNumber = result
-                countLength(result) < 10 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(3)
+                countLength(result) < 13 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(2)
             }
             previousOperator = clickedButton.innerText
             clickedButton.disabled = true
@@ -167,22 +167,21 @@ calculator.addEventListener('click', (event) => {
             if (screen.innerText === '' || firstNumber === '' || lastClickedButton.className === '') return
             if (lastClickedButton.className === 'equals') {  // Allow repeated result
                 result = operate(result, secondNumber, previousOperator)
-                countLength(result) < 10 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(3)
+                countLength(result) < 13 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(2)
                 buttonMemory.forEach(btn => {
                     btn.disabled = false 
                 })
             } else {
                 secondNumber = parseFloat(screen.innerText)
                 result = operate(firstNumber, secondNumber, previousOperator)
-                countLength(result) < 10 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(3)
+                countLength(result) < 13 && Number.isInteger(result) ? screen.innerText = result : screen.innerText = result.toPrecision(3)
                 operatorInstance = 0
             }
         }
 
         // Clear previous input
         if (clickedButtonClass === 'clear') {
-            // Clear the last digit. If there's text, clear all
-            !screen.innerText.includes('ne') ? screen.innerText = screen.innerText.slice(0, screen.innerText.length - 1) : clickedButtonClass = 'all-clear'
+            screen.innerText = ''
         }
 
         // All Clear
