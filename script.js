@@ -246,6 +246,8 @@ calculator.addEventListener('click', (event) => {
 
 // Keyboard
 document.addEventListener('keydown', (event) => {
+    buttons.forEach(btn => btn.blur())  // If a button was clicked, the browser focuses it automatically for keydowns. Override that
+
     let pushedKey = getInputType(event)
     let pushedKeyClass = undefined
     lastKey = keyMemory[keyMemory.length - 1]
