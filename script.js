@@ -1,4 +1,3 @@
-// Basic calculator layout
 const calculator = document.querySelector('.calculator')
 const screen = document.querySelector('.screen')
 const topContainer = document.querySelector('.top-operators')
@@ -34,8 +33,7 @@ function exponent(a, b) {
 }
 
 function countLength(a) {
-    b = a.toString().length
-    return b
+    return a.toString().length
 }
 
 function operate(a, b, operator){
@@ -106,13 +104,13 @@ for (let row = 3; row > 0; row--) {
     numericalsContainer.appendChild(rowContainer)
 }
 
+// Array after buttons have been created
 buttons = Array.from(buttons)
 
 // --- FUNCTIONALITY ---
 let firstNumber = ''
 let secondNumber = ''
 let previousOperator = undefined
-let operatorInstance = 0
 let inputClassMemory = [0]
 let lastInputClass = undefined
 let keyMemory = [0]
@@ -148,7 +146,6 @@ function userInput(inputText, inputClass) {
 
 function operatorInput(inputText) {
     if (screen.innerText === '') return
-    previousOperator = inputText
 
     buttons.forEach(btn => {
         if (btn.innerText === inputText) {
@@ -158,10 +155,13 @@ function operatorInput(inputText) {
             btn.disabled = false
         }
     })
+    
+    if (lastInputClass === '') {  // Spamming operators won't change result
+        previousOperator = inputText
+        return
+    }
 
-    if (lastInputClass === '') return
-    operatorInstance++
-    if (operatorInstance === 1) {
+    if (!inputClassMemory.some(item => item === '')) {
         firstNumber = parseFloat(screen.innerText)
     } else {
         secondNumber = parseFloat(screen.innerText)
@@ -169,10 +169,11 @@ function operatorInput(inputText) {
         firstNumber = result
         countLength(result) < 14 ? screen.innerText = result : screen.innerText = result.toExponential(3)
     }
+    previousOperator = inputText
 }
 
 function getResult() {
-    if (screen.innerText === '' || firstNumber === '' || lastInputClass === '') return
+    if (screen.innerText === '' || firstNumber === '' || buttons.some(btn => btn.disabled)) return
     if (lastInputClass === 'equals') {  // Allow repeated result
         result = operate(result, secondNumber, previousOperator)
         countLength(result) < 14 ? screen.innerText = result : screen.innerText = result.toExponential(3)
@@ -182,20 +183,15 @@ function getResult() {
     } else {
         secondNumber = parseFloat(screen.innerText)
         result = operate(firstNumber, secondNumber, previousOperator)
-        if (countLength(result) < 13) {
-            screen.innerText = result
-        } else {
-            screen.innerText = result.toExponential(3)
-        }
-        operatorInstance = 0
+        countLength(result) < 14 ? screen.innerText = result : screen.innerText = result.toExponential(3)
     }
+    inputClassMemory = [0]
 }
 
 function clearAll() {
     screen.innerText = ''
     firstNumber = ''
     secondNumber = ''
-    operatorInstance = 0
     previousOperator = undefined
     keyMemory = [0]
     lastKey = undefined
@@ -207,7 +203,8 @@ function clearAll() {
 }
 
 
-// Clicks
+// --- LISTENERS ---
+// Click
 calculator.addEventListener('click', (event) => {
     // Only listen to buttons
     if (event.target.nodeName === 'BUTTON') {
