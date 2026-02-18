@@ -8,17 +8,11 @@
     <script defer src="script.js"></script>
 </head>
 <body>
-    <div class="intro">
+    <div class="header">
         <h1>Calculator</h1>
-        <p>This project was done as part of <a target="_blank" href="https://www.theodinproject.com/lessons/foundations-calculator">The Odin Project's foundations course</a>.
-            <br><br>Calculator features: 
-        </p>
-        <ul>
-            <li>Addition, subtraction, division, multiplication, and exponentiation</li>
-            <li>Only allows a single operation at a time. For example, <code>1 + 2 * 3</code> would be evaluated as <code>(1 + 2) * 3 = 3 * 3 = 9</code> NOT <code>1 + (2 * 3) = 1 + 6 = 7</code>. This functionality was instructed in the given task.</li>
-            <li>Equals button can be clicked repeatedly to repeat the previous operation on the result.</li>
-        </ul>
+        <p>This project was done as part of <a target="_blank" href="https://www.theodinproject.com/lessons/foundations-calculator">The Odin Project's foundations course</a>.</p>
     </div>
+    
     <div class="calculator">
         <div class="screen"></div>
         <div class="top-operators"></div>
@@ -27,6 +21,30 @@
             <div class="side-operators"></div>
         </div>
         <div class="bottom-operators"></div>
+    </div>
+
+    <div class="info">
+        <details name="extra">
+            <summary><strong>Calculator features:</strong></summary>
+            <ul>
+                <li>Addition, subtraction, division, multiplication, and exponentiation.</li>
+                <li>Only allows a single operation at a time. For example, <code>1 + 2 * 3</code> would be evaluated as <code>(1 + 2) * 3 = 3 * 3 = 9</code> NOT <code>1 + (2 * 3) = 1 + 6 = 7</code>. This functionality was instructed in the given task.</li>
+                <li>Equals button can be clicked repeatedly to repeat the previous operation on the result.</li>
+                <li>All clear (<code>AC</code>) and clear (<code>C</code>) buttons. AC clears the whole memory, C clears previous input.</li>
+                <li>Mouse and keyboard support.</li>
+            </ul>
+        </details>
+        <details name="extra">
+            <summary><strong>Keyboard shortcuts:</strong></summary>
+            <ul>
+                <li><code>*</code>: Multiplication</li>
+                <li><code>/</code>: Division</li>
+                <li><code>e</code>: Exponentiation</li>
+                <li><code>enter</code>: Result</li>
+                <li><code>backspace</code>: Clear</li>
+                <li><code>a</code>: All clear</li>
+            </ul>
+        </details>
     </div>
 </body>
 </html>
