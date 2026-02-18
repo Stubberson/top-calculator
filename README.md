@@ -1,7 +1,7 @@
 # Calculator
 [Final project of The Odin Project](https://www.theodinproject.com/lessons/foundations-calculator) – a calculator using HTML, CSS, and JavaScript.
 
-I decided to create the HTML mostly programmatically, which, in hindsight, might not have been a good idea. The script could be much clearer.
+I decided to create the HTML mostly programmatically, which, in hindsight, might not have been a good idea. The script could be much cleaner.
 
 It was a challenging, but enjoyable task combining all the teachings of the foundations course.
 
@@ -9,7 +9,8 @@ It was a challenging, but enjoyable task combining all the teachings of the foun
 * Addition, subtraction, division, multiplication, and exponentiation
 * Only allows a single operation at a time. For example, `1 + 2 * 3` would be evaluated as `(1 + 2) * 3 = 3 * 3 = 9` NOT `1 + (2 * 3) = 1 + 6 = 7`. This functionality was instructed in the given task.
 * Equals button can be clicked repeatedly to repeat the previous operation on the result.
-* All clear (`AC`) and clear (`C`) button where AC clears whole memory, C clears previous input.
+* All clear (`AC`) and clear (`C`) buttons. AC clears the whole memory, C clears previous input.
+* Mouse and keyboard support.
 
 > [!note] 
 > Technologies used: HTML5, CSS3, JavaScript

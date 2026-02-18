@@ -16,12 +16,27 @@ div {
     display: flex;
 }
 
-.intro {
+.header {
     margin-top: 12px;
-    justify-self: center;
     flex-direction: column;
-    width: calc(10 * var(--button-width));
+    justify-self: center;
     font-family: "Atkinson Hyperlegible", sans-serif;
+    width: 480px;
+}
+
+.info {
+    margin: 12px 0 0 12px;
+    flex-direction: column;
+    font-family: "Atkinson Hyperlegible", sans-serif;
+}
+
+details {
+    padding-bottom: 4px;
+    width: fit-content;
+}
+
+details > summary {
+    cursor: pointer;
 }
 
 h1 {
