@@ -1,5 +1,5 @@
 # Calculator
-[Final project of The Odin Project](https://www.theodinproject.com/lessons/foundations-calculator) – a calculator using HTML, CSS, and JavaScript.
+[Final project of The Odin Project foundations course](https://www.theodinproject.com/lessons/foundations-calculator) – a calculator using HTML, CSS, and JavaScript.
 
 I decided to create the HTML mostly programmatically, which, in hindsight, might not have been a good idea. The script could be much cleaner.
 
